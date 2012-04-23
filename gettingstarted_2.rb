@@ -2,19 +2,21 @@ require 'rest_client'
 require 'json'
 require 'open-uri'
 
+# This function return the name of the picture
 def get_file_name(url)
   a = Array.new
   a = url.split(/\//)
   return a[-1] 
 end
 
+# Create the files given the url and the local name of file. 
 def get_file(name,url)
   open(name, 'wb') do |file|
     file << open(url).read
   end
-  # print "#{url}"
 end
 
+# json
 url = 'http://api.reddit.com/r/aww.json'
  
 response = RestClient.get(url)
@@ -27,19 +29,13 @@ if json_response_ruby.has_key? 'Error'
   raise "web service error"
 end
 
-# print json_response_ruby
-
+# Here is parsed the json
 json_response_ruby['data']['children'].each { |result|
-  # print "#{result['data']['url']}\n"
 
   url = ""
   url =  result['data']['url']
   if url.end_with?(".jpg") || url.end_with?(".gif") 
-  	name = get_file_name(url)
-  	get_file(name,url)
+    name = get_file_name(url)
+    get_file(name,url)
   end
 }
-
-# Implement a function that get the picture given the url
-
-# def 
