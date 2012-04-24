@@ -3,6 +3,8 @@ require 'json'
 require 'open-uri'
 require 'nokogiri'
 
+class ImageNotFound < Exception; end
+class ServiseNotSupported < Exception; end
 
 class Scrapper
   def initialize(url)
@@ -11,8 +13,13 @@ class Scrapper
 
   # This function returns the name of the picture
   def get_file_name(url)
-    a = url.split(/\//)
-    return a[-1] 
+    if url==0
+      raise "url is 0"
+    else 
+      a = url.split(/\//)
+      return a[-1] 
+    end
+    
   end
 
   # Create the files given the url and the local name of file. 
@@ -48,16 +55,24 @@ class Scrapper
     json_response_ruby['data']['children'].each { |result|
 
       url = result['data']['url']
-
-      if url.end_with?(".jpg") || url.end_with?(".gif") 
-        image_url = url
-        # puts "#{image_url}"
-      elsif url.match /imgur/
-      # else
-        img = ImageGur.new(url)
-        image_url = img.get_image_url
-      else 
-        raise "Unsupported image hosting"
+      begin
+        if url.match(/\.jpg/) || url.match(/\.gif/) 
+          image_url = url
+          # puts "#{image_url}"
+        elsif url.match /imgur/
+        # else
+          img = ImageGur.new(url)
+          image_url = img.get_image_url
+        else 
+          raise ServiseNotSupported.new("Unsupported image hosting")
+        end
+      rescue ImageNotFound => e
+        p '==========='
+        p e.message
+      rescue ServiseNotSupported => e
+        p '!!!!!!!!!!!'
+        p e.message
+        p e.backtrace
       end
 
       puts image_url
@@ -65,7 +80,7 @@ class Scrapper
     }
   end
 
-  def add_to_database(lala)
+  def add_to_database(url)
     name = get_file_name(url)
     get_file(name,url)
 
@@ -95,15 +110,11 @@ class ImageGur
   end
 
   def parse_html(html)
-    # nokogiri
     doc = Nokogiri::HTML(html)
-    doc.css('.image.textbox.zoom a img').each do |link|
-      if link['src'] == 0
-        raise "Could not get the image url"
-      end
-    return link['src']
-    end
+    nokogiri_img = doc.css('.image.textbox img').first
+    raise ImageNotFound.new("No image found in imgur") unless nokogiri_img
     # return url of image
+    nokogiri_img['src']
   end
 end
 
