@@ -2,6 +2,7 @@ require 'rest_client'
 require 'json'
 require 'open-uri'
 require 'nokogiri'
+require './recall.rb'
 
 class ImageNotFound < Exception; end
 class ServiseNotSupported < Exception; end
@@ -13,13 +14,8 @@ class Scrapper
 
   # This function returns the name of the picture
   def get_file_name(url)
-    if url==0
-      raise "url is 0"
-    else 
-      a = url.split(/\//)
-      return a[-1] 
-    end
-    
+    a = url.split(/\//)
+    return a[-1] 
   end
 
   # Create the files given the url and the local name of file. 
@@ -66,6 +62,10 @@ class Scrapper
         else 
           raise ServiseNotSupported.new("Unsupported image hosting")
         end
+      puts image_url
+
+      add_to_database(image_url)
+
       rescue ImageNotFound => e
         p '==========='
         p e.message
@@ -75,16 +75,27 @@ class Scrapper
         p e.backtrace
       end
 
-      puts image_url
-      # add_to_database(image_url)
+      
     }
   end
 
   def add_to_database(url)
-    name = get_file_name(url)
-    get_file(name,url)
-
+    url_name = get_file_name(url)
+    i = ImageUrl.new  
+    i.url = url
+    i.url_name = url_name
+    i.save 
+  # property :id, Serial
+  # property :url, Text, :required => true
+  # property :url, Text
+  # property :description, Text
   end
+
+  # def add_to_database(url)
+  #   name = get_file_name(url)
+  #   get_file(name,url)
+
+  # end
 end
 
 class ImageGur
@@ -117,6 +128,7 @@ class ImageGur
     nokogiri_img['src']
   end
 end
+
 
 scrapper = Scrapper.new('http://api.reddit.com/r/aww.json')
 scrapper.run
