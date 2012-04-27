@@ -82,15 +82,12 @@ FORM {
 }
 
 ul.pictures-list {
-	width: 1150px;
-	margin: 0 auto;
+	width: 900px;
 }
 
 ul.pictures-list li {
 	float: left;
-	width: 350px;
-	height: 250px;
-	margin: 10px;
+	width: 250px;
 }
 
 

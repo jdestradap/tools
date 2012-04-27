@@ -74,8 +74,6 @@ class Scrapper
         p e.message
         p e.backtrace
       end
-
-      
     }
   end
 

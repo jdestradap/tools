@@ -7,7 +7,14 @@
 	<body>
 		<div id="page" style="position: relative">
 			<h1 style="margin-bottom: 12px; font-size: 2.8em"><span style="color: #0ad">Reddit</span><span style="color: #f39">canal</span></h1>
-			<p style="margin-top: 0px; line-height: 1.0em"><span style="font-size: 0.7em">Live, updating Reddit dashboard</span><br /><span style="font-size: 0.5em; color: #999"><em>Ideal for see funny pictures whenever you want!</em></span></p>				
+			<p style="margin-top: 0px; line-height: 1.0em"><span style="font-size: 0.7em">Live, updating Reddit dashboard</span><br /><span style="font-size: 0.5em; color: #999"><em>Ideal for see funny pictures whenever you want!</em></span></p>
+			<ul class='pictures-list'>
+			<% @picture_urls.each do |picture_url| %>  
+			     <li>
+				  <img alt="<%= picture_url.id %>" src="<%= picture_url.url %>" width='350' height='250' />
+			     </li>
+			<% end %> 
+			</ul>
 		</div>
 	</body>
 </html>
