@@ -83,17 +83,7 @@ class Scrapper
     i.url = url
     i.url_name = url_name
     i.save 
-  # property :id, Serial
-  # property :url, Text, :required => true
-  # property :url, Text
-  # property :description, Text
   end
-
-  # def add_to_database(url)
-  #   name = get_file_name(url)
-  #   get_file(name,url)
-
-  # end
 end
 
 class ImageGur
@@ -104,12 +94,6 @@ class ImageGur
   def get_image_url
     html = get_html(@url)
     url = parse_html(html)
-
-    # puts url
-    
-    # open url
-    # scrape image tag
-    # return url
     
     url
   end
@@ -130,48 +114,3 @@ end
 
 scrapper = Scrapper.new('http://api.reddit.com/r/aww.json')
 scrapper.run
-# doc = open('http://www.google.com/search?q=tenderlove')
-# use the nokogiri css 
-
-# $('.image.textbox.zoom a img')
-
-# doc = Nokogiri::HTML(open('http://imgur.com/5JFfV'))
-
-
-####
-# Search for nodes by css
-# doc.css('.image.textbox.zoom a img').each do |link|
-# puts link['src']
-# end
-# puts "#{doc}"
-
-# scrapper.run
-
-# class A
-#   def initialize(str)
-#     @str = str
-#   end
-
-#   def hola
-#     "instance"
-#   end
-
-
-#   def to_s
-#     @str
-#   end
-
-#   def self.hola
-#     "class"
-#   end
-
-#   def str
-#     puts "str"
-#     @str
-#   end
-
-#   def str=(value)
-#     @str = value
-#   end
-
-# end
